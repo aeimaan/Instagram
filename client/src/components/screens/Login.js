@@ -8,7 +8,7 @@ function Login (){
         <h2>Instagram</h2>
         <input type="text" placeholder="Username" />
         <input type="text" placeholder="password" />
-        <button className="btn waves-effect waves-light">Login</button>
+        <button className="btn waves-effect waves-light blue darken-1">Login</button>
         <p className="switch">Don't have an account? <Link className="link" to="/signup">Sign Up</Link></p>
      </div>
     </div>

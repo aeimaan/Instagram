@@ -9,7 +9,7 @@ function Login (){
         <input type="text" placeholder="Email" />
         <input type="text" placeholder="Username" />
         <input type="text" placeholder="Password" />
-        <button className="btn waves-effect waves-light">Signup</button>
+        <button className="btn waves-effect waves-light blue darken-1">Signup</button>
         <p className="switch">Already have an account? <Link className="link" to="/login">Login</Link></p>
      </div>
     </div>

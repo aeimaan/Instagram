@@ -4,6 +4,11 @@ a{
    color: black !important;
 }
 
+hr{
+  border: 1px solid  rgba(var(--b38,219,219,219),1);
+  width: 70%;
+}
+
 .brand-logo,h2{
   font-family: 'Grand Hotel', cursive;
 }
@@ -29,7 +34,7 @@ a{
 .btn{
   /* background-color: #0095f6; */
   margin-top: 4px;
-  background-color: rgba(var(--d69,0,149,246),1);
+  background-color: rgba(var(--d69,0,149,246),1) ;
 }
 
 .input-field input[type=text]:focus{
@@ -43,4 +48,118 @@ a{
 
 p .link{
   color: #458eff !important;
+}
+
+
+/* profile page */
+.profile{
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin: 0 auto;
+  /* justify-content: center; */
+
+  /* background-color: blue; */
+  /* width: 100%; */
+
+}
+
+.profile-card{
+  /* background-color: green; */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 58%;
+  margin: 0 auto;
+
+  /* justify-content:flex-start; */
+  /* margin: 18px auto 30px; */
+}
+
+.img-container{
+  /* background-color: black; */
+  /* style={{width:"160px", height:"160px", borderRadius:"80px"}} */
+  display: flex;
+  justify-content: center;
+  width: 240px;
+  height: 240px;
+  align-items: center;
+  margin: 18px 20px 10px 20px;;
+  border-radius: 50%;
+  overflow: hidden;
+  /* margin-left: 20px; */
+}
+
+.info-card{
+  /* background-color: red; */
+  width: 60%;
+
+  margin: 18px auto;
+  margin-left: 0;
+
+
+}
+
+.profile-pic{
+  width: 100%;
+  /* height: 100%; */
+  transform: scale(1.5);
+}
+
+.profile-info-card{
+  /* background-color: blue; */
+  display: flex;
+  justify-content:flex-start;
+  margin: 0px 0px 20px;
+  /* width: 109%; */
+}
+
+.profile-info{
+  margin-right: 5%;
+}
+
+/* PROFILE POSTS */
+
+.gallery{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* background-color: blue; */
+  max-width: 70%;
+  margin: 8px auto;
+}
+
+.item{
+  width: 33.333333%;
+}
+
+
+/* HOME PAGE  */
+.home{
+  display: flex;
+  flex-direction: column;
+  /* background-color: blue; */
+}
+
+.home-card{
+  width: 610px;
+  height: max-content;
+  margin: 20px auto;
+  border: 0.994px solid rgba(var(--b38,219,219,219),1);
+  margin-bottom: 24px;
+}
+
+.image{
+  width: 100%;
+  object-fit: cover;
+}
+
+
+/* CREATE POST */
+.input-filed{
+  margin: 30px auto;
+  max-width: 500px;
+  padding: 20px;
+  text-align: center;
 }
