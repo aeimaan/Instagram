@@ -1,8 +1,11 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
 const {MONGOURI} = require("./keys.js");
 // const bodyParser = require("body-parser");
+
+app.use(cors());
 
 mongoose.connect(MONGOURI);
 mongoose.connection.on("connected", function(err){
@@ -26,6 +29,6 @@ app.get('/', (req, res)=>{
   res.send("HELLO MATE");
 })
 
-app.listen(3000, function(){
+app.listen(5000, function(){
   console.log("Server on port 3000");
 })

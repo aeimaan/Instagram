@@ -43,7 +43,7 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/signup', (req, res)=>{
-  const {username,email,password} = req.body;
+  const {username,password,email} = req.body;
   if(!email || !password || !username){
     return (res.status(422).json({error:"please enter all the fields!"}));
   }
@@ -56,26 +56,13 @@ router.post('/signup', (req, res)=>{
       User.register({username: req.body.username, email:req.body.email}, req.body.password, function(err, savedUser){
         if(!err){
           passport.authenticate("local")(req, res, function(){
-          res.send("SAVED: " + savedUser.username);
+          res.json({message: "Signed Up: "+ savedUser.username});
           })
         }else{
           console.log(err);
           res.send("nah")
         }
       })
-
-      // const user = new User({
-      //   email,
-      //   name,
-      //   password
-      // })
-      // user.save((err, savedUser)=>{
-      //   if(err){
-      //     console.log(err);
-      //   }else{
-      //     res.send("SAVED: "+ savedUser.name);
-      //   }
-      // })
     }
   })
 })
@@ -89,16 +76,19 @@ router.post('/signin', (req, res)=>{
   req.login(user, function(err){
     if(err){
       console.log(err);
-      res.send("not logged in");
+      res.json({error:"wrong password bruh?!?"});
     }else{
+      // console.log(here);
       passport.authenticate("local")(req, res, function(){
         console.log("LOGGED IN: "+user.username);
         User.findOne({username:user.username}, function(err,foundUser){
           if(err){
             console.log(err);
+            res.json({error:"bruh"});
           }else{
             const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
-            res.json({token});
+            const {_id, email, username} = foundUser;
+            res.json({token:token, user:{_id, email, username}});
           }
         })
       })

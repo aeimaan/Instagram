@@ -24,15 +24,17 @@ router.get('/myposts', requireLogin, (req, res)=>{
 })
 
 router.post('/createpost', requireLogin, (req, res)=>{
-  const {title, body} = req.body;
+  console.log("heres the stuff:::");
+  const {title, body, pic} = req.body;
+  console.log(title, body, pic);
   if(!title || !body){
     res.status(422).json({error:"Please fill all fields"});
   }
-  req.user.password = undefined;
   // console.log(req.user);
   const post = new Post({
     title: title,
     body: body,
+    photo: pic,
     postedBy: req.user
   })
   post.save(function(err, savedPost){
