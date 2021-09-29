@@ -163,3 +163,11 @@ p .link{
   padding: 20px;
   text-align: center;
 }
+
+
+/* TOAST CONTAINER */
+#toast-container{
+  top: 30px !important;
+  right: 20px !important;
+  left: auto !important;
+}
