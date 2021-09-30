@@ -67,33 +67,29 @@ router.post('/signup', (req, res)=>{
   })
 })
 
-router.post('/signin', (req, res)=>{
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password
-  })
-
-  req.login(user, function(err){
-    if(err){
-      console.log(err);
-      res.json({error:"wrong password bruh?!?"});
-    }else{
-      // console.log(here);
-      passport.authenticate("local")(req, res, function(){
-        console.log("LOGGED IN: "+user.username);
-        User.findOne({username:user.username}, function(err,foundUser){
-          if(err){
-            console.log(err);
-            res.json({error:"bruh"});
-          }else{
-            const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
-            const {_id, email, username} = foundUser;
-            res.json({token:token, user:{_id, email, username}});
-          }
-        })
-      })
+router.post('/signin', (req, res) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      // console.log(res.json({error:info}));
+      return  res.json({error:info});
     }
-  })
-})
+    if (!user && info) {
+      // console.log(res.json({error:info}));
+      return  res.json({error:info});
+    }
+
+    console.log("LOGGED IN: "+user.username);
+    User.findOne({username:user.username}, function(err,foundUser){
+      if(err){
+        console.log(err);
+        res.json({error:"bruh"});
+      }else{
+        const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
+        const {_id, email, username} = foundUser;
+        res.json({token:token, user:{_id, email, username}});
+      }
+    })
+  })(req, res);
+});
 
 module.exports = router;

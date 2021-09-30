@@ -37,7 +37,7 @@ hr{
   background-color: rgba(var(--d69,0,149,246),1) ;
 }
 
-.input-field input[type=text]:focus{
+.input-field input[type=text]:focus,[type=password]:focus{
   border-bottom: 1px solid #458eff !important;
   box-shadow: 0 1px 0 0 #458eff!important;
 }

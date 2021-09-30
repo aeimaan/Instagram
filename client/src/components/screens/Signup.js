@@ -58,7 +58,7 @@ function Login (){
         <input type="text" placeholder="Username"
           value={username} onChange={updateName}
         />
-        <input type="text" placeholder="Password"
+        <input type="password" placeholder="Password"
           value={password} onChange={updatePassword}
         />
         <button className="btn waves-effect waves-light blue darken-1"

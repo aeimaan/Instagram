@@ -31,7 +31,7 @@ function CreatePost(){
           M.toast({html: data.error});
         }else{
           M.toast({html: "Post created successful"});
-          history.push('/login');
+          history.push('/');
         }
     }).catch(err=>{
       console.log(err);

@@ -1,17 +1,19 @@
-import react, {useState} from "react";
+import react, {useState, useContext} from "react";
 import {Link, useHistory} from 'react-router-dom';
+import {UserContext} from '../../App.js'
 import M from 'materialize-css';
 
 function Login (){
+  const {state, dispatch} = useContext(UserContext);
   const history = useHistory();
   const [username, setName]= useState("");
   const [password, setPassword]= useState("");
   const PostData = ()=>{
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    // if(re.test(username)){
-    //   M.toast({html: "thats an email goofy"});
-    //   return;
-    // }
+    if(re.test(username)){
+      M.toast({html: "thats an email goofy"});
+      return;
+    }
 
     fetch("http://localhost:5000/signin",
     {
@@ -25,10 +27,18 @@ function Login (){
       })
     }).then(res=>res.json()).then(data=>{
         if(data.error){
-          M.toast({html: data.error});
+          let message = ""
+          if(data.error.name == "IncorrectPasswordError"){
+            message = "Wrong Password bud";
+          }else if (data.error.name == "IncorrectUsernameError"){
+            message = "BRUH thats not even a user \n go sign up";
+          }
+          // console.log(message);
+          M.toast({html: message});
         }else{
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
+          dispatch({type:"USER", payload:data.user})
           M.toast({html: "Signed in successful"});
           history.push('/');
         }
@@ -51,7 +61,7 @@ function Login (){
         <input type="text" placeholder="Username"
           value={username} onChange={updateName}
         />
-        <input type="text" placeholder="password"
+        <input type="password" placeholder="password"
           value={password} onChange={updatePassword}
         />
         <button className="btn waves-effect waves-light blue darken-1"
