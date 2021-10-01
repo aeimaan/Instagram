@@ -1,8 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {UserContext} from '../../App.js'
 
 
 function Home () {
   const [data, setData]= useState([]);
+  const [liked, setLiked] = useState(false);
+  const {state, dispatch} = useContext(UserContext);
+
+  function updateLiked(id){
+    setLiked(!liked)
+    if(!liked){
+      likePost(id);
+    }else{
+      unlikePost(id);
+    }
+  }
 
   useEffect(()=>{
     fetch('/allposts',{
@@ -11,10 +23,58 @@ function Home () {
       }
     }).then(res => res.json())
     .then(result=>{
-      // console.log(result);
+      console.log(result);
       setData(result.posts);
     })
   },[])
+
+  function likePost(id){
+    fetch('/like', {
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": "Bearer "+ localStorage.getItem("jwt")
+      },
+      body:JSON.stringify({
+        postId:id
+      })
+    }).then(res=>res.json())
+    .then(result=>{
+      console.log(result);
+      const newData = data.map(item=>{
+        if(item._id == result._id){
+          return result;
+        }else{
+          return item;
+        }
+      })
+      setData(newData)
+    })
+  }
+
+  function unlikePost(id){
+    fetch('/unlike', {
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": "Bearer "+ localStorage.getItem("jwt")
+      },
+      body:JSON.stringify({
+        postId:id
+      })
+    }).then(res=>res.json())
+    .then(result=>{
+      console.log(result);
+      const newData = data.map(item=>{
+        if(item._id == result._id){
+          return result;
+        }else{
+          return item;
+        }
+      })
+      setData(newData)
+    })
+  }
 
   return(
     <div className="home">
@@ -28,7 +88,10 @@ function Home () {
               <img className="image" src={item.photo} />
             </div>
             <div className="card-content">
-              <i className="material-icons">favorite</i>
+              <i className= {item.likes.includes(state._id)? " material-icons likes": "material-icons"}
+                onClick={!item.likes.includes(state._id)? ()=>likePost(item._id):  ()=>unlikePost(item._id)}
+              >favorite</i>
+              <h6>{item.likes.length} likes</h6>
               <h6>{item.title}</h6>
               <p>{item.body}</p>
               <input type="text" placeholder="comment" />

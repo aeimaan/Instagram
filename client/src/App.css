@@ -155,6 +155,9 @@ p .link{
   object-fit: cover;
 }
 
+.likes{
+  color: red ;
+}
 
 /* CREATE POST */
 .input-filed{
