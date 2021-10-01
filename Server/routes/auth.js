@@ -80,11 +80,13 @@ router.post('/signin', (req, res) => {
 
     console.log("LOGGED IN: "+user.username);
     User.findOne({username:user.username}, function(err,foundUser){
+      console.log("id:  ", foundUser._id);
       if(err){
         console.log(err);
         res.json({error:"bruh"});
       }else{
         const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
+        console.log("token:  " , token);
         const {_id, email, username} = foundUser;
         res.json({token:token, user:{_id, email, username}});
       }

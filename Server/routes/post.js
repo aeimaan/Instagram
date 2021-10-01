@@ -13,8 +13,9 @@ router.get('/allposts', requireLogin, (req, res)=>{
   // console.log(req.user);
   Post.find()
   .populate("postedBy", "_id username" )
+  .populate("comments.postedBy", "_id username")
   .then(posts=>{
-    console.log(posts);
+    // console.log(posts);
     res.json({posts});
   })
 })
@@ -55,7 +56,8 @@ router.put('/like', requireLogin, (req, res)=>{
     $push:{likes:req.user._id}
   },{
     new:true
-  }).populate("postedBy", "_id username" ).exec((err, result)=>{
+  }).populate("postedBy", "_id username" ).populate("comments.postedBy", "_id username" )
+  .exec((err, result)=>{
     if(err){
       return res.status(422).json({error:err});
     }else{
@@ -70,10 +72,32 @@ router.put('/unlike', requireLogin, (req, res)=>{
     $pull:{likes:req.user._id}
   },{
     new:true
-  }).populate("postedBy", "_id username" ).exec((err, result)=>{
+  }).populate("postedBy", "_id username" ).populate("comments.postedBy", "_id username" )
+  .exec((err, result)=>{
     if(err){
       return res.status(422).json({error:err});
     }else{
+      res.json(result)
+    }
+  })
+})
+
+router.put('/comment', requireLogin, (req, res)=>{
+  const comment = {
+    text:req.body.text,
+    postedBy: req.user._id
+  }
+  Post.findByIdAndUpdate(req.body.postId,{
+    $push:{comments:comment}
+  },{
+    new:true
+  }).populate("comments.postedBy", "_id username" )
+  .populate("postedBy", "_id username")
+  .exec((err, result)=>{
+    if(err){
+      return res.status(422).json({error:err});
+    }else{
+      console.log(result);
       res.json(result)
     }
   })

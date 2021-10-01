@@ -159,6 +159,10 @@ p .link{
   color: red ;
 }
 
+.clear{
+  display: none;
+}
+
 /* CREATE POST */
 .input-filed{
   margin: 30px auto;
