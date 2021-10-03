@@ -104,10 +104,50 @@ function Home () {
     })
   }
 
+  const deletePost = (postId)=>{
+    fetch(`/deletepost/${postId}` , {
+      method:"delete",
+      headers:{
+        "Authorization": "Bearer "+ localStorage.getItem("jwt")
+      }
+    }).then(res=> res.json())
+    .then(result=>{
+      console.log(result);
+      console.log("id: ",result._id);
+      const newData = data.filter(item=>{
+        console.log(item._id);
+        return item._id !== result._id
+      })
+      console.log(newData);
+      setData(newData);
+    })
+  }
+  const deleteComment = (itemId, commentId)=>{
+    console.log(commentId);
+    fetch(`/deletecomment/${itemId}/${commentId}` , {
+      method:"delete",
+      headers:{
+        "Authorization": "Bearer "+ localStorage.getItem("jwt")
+      }
+    }).then(res=> res.json())
+    .then(result=>{
+      console.log(result);
+      const newData = data.map(item=>{
+        if(item._id == result._id){
+          return result;
+        }else{
+          return item;
+        }
+      })
+      setData(newData);
+    })
+  }
+
   return(
     <div className="home">
       {
         data.map(item=>{
+          num = 0;
           // console.log(item);
         return(
           <div className="card home-card" key={item._id}>
@@ -119,6 +159,11 @@ function Home () {
               <i className= {item.likes.includes(state._id)? " material-icons likes": "material-icons"}
                 onClick={!item.likes.includes(state._id)? ()=>likePost(item._id):  ()=>unlikePost(item._id)}
               >favorite</i>
+
+              {item.postedBy._id==state._id
+                && <i className="material-icons" onClick={()=>deletePost(item._id)} style={{float:"right"}}>delete</i>}
+
+
               <h6>{item.likes.length} likes</h6>
               <h6>{item.title}</h6>
               <p>{item.body}</p>
@@ -131,31 +176,30 @@ function Home () {
                 <input type="text" placeholder="comment"  />
               </form>
 
-              {item.comments.map(record=>{
-
+              {item.comments.reverse().map(record=>{
+                // console.log(record.text);
                 num++;
-
                 if(loadMore){
                   return(
                     <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.postedBy.username}  </span>
-                     {record.text}
+                     {record.text} {record.postedBy._id==state._id
+                       && <i className="material-icons" onClick={()=>deleteComment(item._id, record._id)} style={{float:"right"}}>delete</i>}
                     </h6>
                   )
                 }else if (num<6) {
                   return(
                     <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.postedBy.username}  </span>
-                     {record.text}
+                     {record.text} {record.postedBy._id==state._id
+                       && <i className="material-icons" onClick={()=>deleteComment(item._id, record._id)} style={{float:"right"}}>delete</i>}
                     </h6>
                   )
                 }
-
-
-
               })}
 
-              <button className={loadMore? "clear": ""} onClick={()=>{
+              <button className={loadMore || (item.comments.length<5)? "clear": ""} onClick={()=>{
                 setLoadMore(true);
               }}>Load More</button>
+
 
             </div>
           </div>

@@ -15,7 +15,7 @@ function Login (){
       return;
     }
 
-    fetch("http://localhost:5000/signin",
+    fetch("/signin",
     {
       method:"post",
       headers:{

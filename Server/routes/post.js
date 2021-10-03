@@ -51,6 +51,41 @@ router.post('/createpost', requireLogin, (req, res)=>{
   })
 })
 
+router.delete('/deletepost/:postId', requireLogin, (req, res)=>{
+  // console.log(req.params.postId);
+  Post.findOne({_id:req.params.postId})
+  .populate("postedBy", "_id")
+  .exec((err, foundPost)=>{
+    if(err || !foundPost){
+      return res.status(422).json({error:err})
+    }else{
+      if(foundPost.postedBy._id.toString() === req.user._id.toString()){
+        foundPost.remove().then(result=>{
+          console.log("results",result);
+          res.json(result)
+        }).catch(err=>{
+          console.log(err);
+        })
+      }
+    }
+  })
+})
+
+router.delete('/deletecomment/:itemId/:commentId', requireLogin, async function(req, res){
+  // let id = null;
+  Post.findByIdAndUpdate( req.params.itemId , { "$pull": { "comments": { "_id": req.params.commentId } }},
+  { new:true }).populate("postedBy", "_id username" ).populate("comments.postedBy", "_id username" )
+  .exec((err, result)=>{
+    if(err){
+      return res.status(422).json({error:err});
+    }else{
+      console.log(result);
+      res.json(result)
+    }
+  })
+
+})
+
 router.put('/like', requireLogin, (req, res)=>{
   Post.findByIdAndUpdate(req.body.postId,{
     $push:{likes:req.user._id}
@@ -77,6 +112,7 @@ router.put('/unlike', requireLogin, (req, res)=>{
     if(err){
       return res.status(422).json({error:err});
     }else{
+      // console.log(result);
       res.json(result)
     }
   })
@@ -88,7 +124,7 @@ router.put('/comment', requireLogin, (req, res)=>{
     postedBy: req.user._id
   }
   Post.findByIdAndUpdate(req.body.postId,{
-    $push:{comments:comment}
+    $push:{comments:{$each: [comment], $position:0}}
   },{
     new:true
   }).populate("comments.postedBy", "_id username" )

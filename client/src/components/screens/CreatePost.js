@@ -13,7 +13,7 @@ function CreatePost(){
   useEffect(()=>{
     if(url != ""){
       console.log("heres the url 2:"  + url);
-    fetch("http://localhost:5000/createpost",
+    fetch("/createpost",
     {
       method:"post",
       headers:{

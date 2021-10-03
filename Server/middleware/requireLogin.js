@@ -6,7 +6,7 @@ const User = mongoose.model("User");
 module.exports = async (req, res, next) => {
   // console.log("Authorization CODE///////////");
   const {authorization} = req.headers;
-  console.log("authorization:   ",authorization);
+  // console.log("authorization:   ",authorization);
   if(!authorization){
     res.status(401).json({error:"you must be logged in!"});
   }
@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
       const {_id} = payload;
       console.log(_id);
       User.findOne({_id:_id}, function(err, foundUser){
-        console.log(foundUser);
+        // console.log(foundUser);
         if(err){
           console.log(err);
         }else{
