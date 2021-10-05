@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {UserContext} from '../../App.js'
+import {Link} from 'react-router-dom';
 
 
 function Home () {
@@ -151,7 +152,7 @@ function Home () {
           // console.log(item);
         return(
           <div className="card home-card" key={item._id}>
-            <h5>{item.postedBy.username}</h5>
+            <h5><Link to={item.postedBy._id==state._id? '/profile'  : "/profile/"+item.postedBy._id}>{item.postedBy.username}</Link></h5>
             <div className="card-img">
               <img className="image" src={item.photo} />
             </div>
