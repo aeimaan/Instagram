@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
       return res.status(401).json({error:"Must be Logged in to access this page"});
     }else{
       const {_id} = payload;
-      console.log(_id);
+      // console.log(_id);
       User.findOne({_id:_id}, function(err, foundUser){
         // console.log(foundUser);
         if(err){

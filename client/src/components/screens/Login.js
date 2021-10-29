@@ -65,7 +65,7 @@ function Login (){
           value={password} onChange={updatePassword}
         />
         <button className="btn waves-effect waves-light blue darken-1"
-          onClick={PostData}
+          onClick={()=>PostData()}
         >Login</button>
         <p className="switch">Don't have an account? <Link className="link" to="/signup">Sign Up</Link></p>
      </div>

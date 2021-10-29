@@ -5,6 +5,7 @@ import {useParams} from 'react-router-dom';
 
 function Profile (){
   const [userProfile, setProfile] = useState(null);
+  const [showFollow, setShowFollow] = useState(true);
   const {state, dispatch} = useContext(UserContext);
   const {userid} = useParams();
 
@@ -21,9 +22,67 @@ function Profile (){
         console.log(result);
         setProfile(result);
       }
-      // console.log(posts[0].photo);
     })
   },[])
+
+  const followUser = () =>{
+    fetch('/follow', {
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body:JSON.stringify({
+        followId: userid
+      })
+    }).then(res => res.json())
+    .then(data=>{
+      console.log(data);
+      dispatch({type:"UPDATE", payload: {following:data.following, followers:data.followers}})
+      localStorage.setItem("user", JSON.stringify(data))
+      setProfile((prevState)=>{
+        // console.log("userprofile" + userProfile);
+        return {
+          ...prevState,
+          foundUser:{
+                  ...prevState.foundUser,
+                  followers:[...prevState.foundUser.followers, data._id]
+          }
+        }
+      })
+      setShowFollow(false);
+    })
+  }
+
+  const unfollowUser = () =>{
+    fetch('/unfollow', {
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body:JSON.stringify({
+        unfollowId: userid
+      })
+    }).then(res => res.json())
+    .then(data=>{
+      console.log(data);
+      dispatch({type:"UPDATE", payload: {following:data.following, followers:data.followers}})
+      localStorage.setItem("user", JSON.stringify(data))
+      setProfile((prevState)=>{
+        // console.log(data._id);
+        const newFollower = prevState.foundUser.followers.filter(item => item !== data._id);
+        return {
+          ...prevState,
+          foundUser:{
+                  ...prevState.foundUser,
+                  followers:newFollower
+          }
+        }
+      })
+      setShowFollow(true);
+    })
+  }
 
   return(
     <>
@@ -38,9 +97,17 @@ function Profile (){
           <h4 className="profile-name">{userProfile? userProfile.foundUser.username:"loading"}</h4>
             <div className="profile-info-card">
               <h5 className="profile-info">{userProfile? userProfile.foundPosts.length:"loading"} Post</h5>
-              <h5 className="profile-info">40 followers</h5>
-              <h5 className="profile-info">40 following</h5>
+              <h5 className="profile-info">{userProfile.foundUser.followers.length} Followers</h5>
+              <h5 className="profile-info">{userProfile.foundUser.following.length} Following</h5>
             </div>
+            {showFollow?
+              <button className="btn waves-effect waves-light blue darken-1"
+                onClick={()=>followUser()}
+              >Follow</button>:
+              <button className="btn waves-effect waves-light blue darken-1"
+                onClick={()=>unfollowUser()}
+              >UnFollow</button>
+            }
           </div>
         </div>
         <hr></hr>

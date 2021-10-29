@@ -14,7 +14,7 @@ function Profile (){
       }
     }).then(res=>res.json())
     .then(result=>{
-      // console.log(result.posts);
+      console.log("result" , state);
       setPosts(result.posts);
       // console.log(posts[0].photo);
     })
@@ -30,9 +30,9 @@ function Profile (){
         <div className="info-card">
           <h4 className="profile-name">{state?state.username:"loading"}</h4>
           <div className="profile-info-card">
-            <h5 className="profile-info">40 posts</h5>
-            <h5 className="profile-info">40 followers</h5>
-            <h5 className="profile-info">40 following</h5>
+            <h5 className="profile-info">{posts.length} Post</h5>
+            <h5 className="profile-info">{state?state.followers.length:"loading"} Followers</h5>
+            <h5 className="profile-info">{state?state.following.length:"loading"} Following</h5>
           </div>
         </div>
       </div>
