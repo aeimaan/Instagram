@@ -9,9 +9,17 @@ const requireLogin = require('../middleware/requireLogin.js');
 
 
 router.get('/allposts', requireLogin, (req, res)=>{
-  // console.log("stufffff////////////");
-  // console.log(req.user);
   Post.find()
+  .populate("postedBy", "_id username" )
+  .populate("comments.postedBy", "_id username")
+  .then(posts=>{
+    // console.log(posts);
+    res.json({posts});
+  })
+})
+
+router.get('/followingposts', requireLogin, (req, res)=>{
+  Post.find({postedBy: {$in:req.user.following}})
   .populate("postedBy", "_id username" )
   .populate("comments.postedBy", "_id username")
   .then(posts=>{

@@ -70,11 +70,9 @@ router.post('/signup', (req, res)=>{
 router.post('/signin', (req, res) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      // console.log(res.json({error:info}));
       return  res.json({error:info});
     }
     if (!user && info) {
-      // console.log(res.json({error:info}));
       return  res.json({error:info});
     }
 
@@ -87,8 +85,8 @@ router.post('/signin', (req, res) => {
       }else{
         const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
         console.log("token:  " , token);
-        const {_id, email, username} = foundUser;
-        res.json({token:token, user:{_id, email, username}});
+        const {_id, email, username, following, followers} = foundUser;
+        res.json({token:token, user:{_id, email, username, following, followers}});
       }
     })
   })(req, res);

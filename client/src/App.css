@@ -171,10 +171,23 @@ p .link{
   text-align: center;
 }
 
+.home-card h5{
+  margin-top: 0px;
+  border-bottom: 0.994px solid rgba(var(--b38,219,219,219),1);
+  padding: 16px;
+}
+.home-card a{
+  padding-left: 7px;
+}
+
 
 /* TOAST CONTAINER */
 #toast-container{
   top: 30px !important;
   right: 20px !important;
   left: auto !important;
+}
+
+.material-icons:hover{
+  cursor: pointer;
 }
