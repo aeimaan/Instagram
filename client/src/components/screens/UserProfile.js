@@ -91,7 +91,7 @@ function Profile (){
         <div className="profile-card">
           <div className="img-container">
           <img className="profile-pic"
-          src="https://upleap.com/blog/wp-content/uploads/2018/10/how-to-create-the-perfect-instagram-profile-picture.jpg"/>
+          src={userProfile? userProfile.foundUser.pic : 'loading'}/>
           </div>
           <div className="info-card">
           <h4 className="profile-name">{userProfile? userProfile.foundUser.username:"loading"}</h4>

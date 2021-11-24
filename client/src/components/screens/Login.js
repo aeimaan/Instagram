@@ -1,4 +1,4 @@
-import react, {useState, useContext} from "react";
+import React, {useState, useContext} from "react";
 import {Link, useHistory} from 'react-router-dom';
 import {UserContext} from '../../App.js'
 import M from 'materialize-css';
@@ -26,12 +26,15 @@ function Login (){
         password
       })
     }).then(res=>res.json()).then(data=>{
+      console.log(data.error);
         if(data.error){
           let message = ""
           if(data.error.name == "IncorrectPasswordError"){
             message = "Wrong Password bud";
           }else if (data.error.name == "IncorrectUsernameError"){
             message = "BRUH thats not even a user \n go sign up";
+          }else if (data.error.message == 'Missing credentials') {
+            message = 'Missing Credentials'
           }
           // console.log(message);
           M.toast({html: message});

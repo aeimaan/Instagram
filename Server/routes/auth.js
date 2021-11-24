@@ -43,7 +43,7 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/signup', (req, res)=>{
-  const {username,password,email} = req.body;
+  const {username,password,email,pic} = req.body;
   if(!email || !password || !username){
     return (res.status(422).json({error:"please enter all the fields!"}));
   }
@@ -53,7 +53,7 @@ router.post('/signup', (req, res)=>{
     }else if(savedUser){
       return (res.status(422).json({error:"email already in use"}));
     }else{
-      User.register({username: req.body.username, email:req.body.email}, req.body.password, function(err, savedUser){
+      User.register({username: req.body.username, email:req.body.email, pic:pic}, req.body.password, function(err, savedUser){
         if(!err){
           passport.authenticate("local")(req, res, function(){
           res.json({message: "Signed Up: "+ savedUser.username});
@@ -85,8 +85,8 @@ router.post('/signin', (req, res) => {
       }else{
         const token = jwt.sign({_id: foundUser._id}, JWT_SECRET);
         console.log("token:  " , token);
-        const {_id, email, username, following, followers} = foundUser;
-        res.json({token:token, user:{_id, email, username, following, followers}});
+        const {_id, email, username, following, followers,pic} = foundUser;
+        res.json({token:token, user:{_id, email, username, following, followers,pic}});
       }
     })
   })(req, res);
